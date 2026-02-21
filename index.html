@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>होली उत्सव 2026 - बलम पिचकारी स्पेशल</title>
+    <style>
+        :root {
+            --pink: #ff007f;
+            --yellow: #ffd700;
+            --blue: #00e5ff;
+        }
+
+        body {
+            margin: 0; padding: 0; min-height: 100vh;
+            display: flex; justify-content: center; align-items: center;
+            background-color: #fff;
+            transition: background-color 0.8s ease;
+            font-family: 'Arial', sans-serif;
+            overflow: hidden; touch-action: manipulation;
+        }
+
+        /* पिचकारी और गुलाल सजावट */
+        .decor { position: absolute; font-size: 60px; z-index: 5; filter: drop-shadow(4px 4px 10px rgba(0,0,0,0.2)); user-select: none; pointer-events: none; }
+        .p-left { top: 5%; left: 5%; transform: rotate(-20deg); }
+        .p-right { bottom: 5%; right: 5%; transform: rotate(160deg); }
+        .g-left { bottom: 10%; left: 10%; }
+        .g-right { top: 10%; right: 10%; }
+
+        /* मेन कार्ड */
+        .card {
+            position: relative; z-index: 20;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 30px; border-radius: 30px;
+            text-align: center; width: 85%; max-width: 400px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.25);
+            border: 6px solid var(--pink);
+        }
+
+        h1 { font-size: 3.5rem; margin: 10px 0; color: var(--pink); text-shadow: 3px 3px var(--yellow); animation: pulse 1.5s infinite; }
+        @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
+
+        .wish-msg { font-size: 1.2rem; color: #333; font-weight: bold; margin-bottom: 20px; line-height: 1.4; }
+
+        input { width: 90%; padding: 15px; border: 2px solid var(--pink); border-radius: 50px; margin-bottom: 15px; text-align: center; font-size: 1.1rem; }
+
+        .btn-wa {
+            background: #25D366; color: white; border: none; padding: 15px 25px;
+            border-radius: 50px; font-weight: bold; cursor: pointer; width: 100%;
+            display: none; align-items: center; justify-content: center;
+            text-decoration: none; font-size: 1.1rem; box-shadow: 0 10px 20px rgba(37, 211, 102, 0.3);
+        }
+
+        .btn-gen { background: var(--pink); color: white; border: none; padding: 15px 25px; border-radius: 50px; font-weight: bold; width: 100%; margin-bottom: 10px; cursor: pointer; }
+
+        /* रंग के धब्बे */
+        .splash { position: absolute; border-radius: 50%; pointer-events: none; z-index: 2; animation: splashOut 0.8s ease-out forwards; }
+        @keyframes splashOut { 0% { transform: scale(0); opacity: 1; } 100% { transform: scale(1.8); opacity: 0; } }
+
+        /* म्यूजिक बटन */
+        .m-toggle { position: fixed; top: 15px; right: 15px; z-index: 100; cursor: pointer; font-size: 35px; background: white; border-radius: 50%; width: 50px; height: 50px; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 15px rgba(0,0,0,0.2); }
+    </style>
+</head>
+<body>
+
+    <div class="m-toggle" onclick="toggleM()">🎵</div>
+
+    <audio id="audioHoli" loop>
+        <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-8.mp3" type="audio/mpeg">
+    </audio>
+
+    <div class="decor p-left">🔫</div>
+    <div class="decor p-right">🔫</div>
+    <div class="decor g-left">🥣</div>
+    <div class="decor g-right">🥣</div>
+
+    <div class="card">
+        <h2 id="greet">नमस्ते!</h2>
+        <h1>Happy Holi</h1>
+        <p class="wish-msg">"बलम पिचकारी जो तूने मुझे मारी... <br> तो सीधी सादी छोरी शराबी हो गई!"</p>
+
+        <input type="text" id="uName" placeholder="अपना नाम यहाँ लिखें">
+        <button class="btn-gen" onclick="generate()">1. लिंक और गाना शुरू करें</button>
+        <a id="waBtn" class="btn-wa" href="#" target="_blank">2. WhatsApp पर भेजें ✅</a>
+        
+        <p style="font-size: 0.8rem; margin-top: 15px; color: #666;">रंगों के लिए स्क्रीन पर कहीं भी टच करें!</p>
+    </div>
+
+    <script>
+        const colors = ['#ff007f', '#ffd700', '#00e5ff', '#39ff14', '#ff4500', '#9c27b0'];
+        const bgs = ['#FFF5F8', '#F0FDFF', '#FFFDF0', '#F3E5F5', '#E8F5E9'];
+        const track = document.getElementById('audioHoli');
+
+        // नाम डिस्प्ले
+        const urlParams = new URLSearchParams(window.location.search);
+        const n = urlParams.get('name');
+        if (n) { document.getElementById('greet').innerText = decodeURIComponent(n) + " की ओर से..."; }
+
+        function toggleM() {
+            if (track.paused) track.play();
+            else track.pause();
+        }
+
+        window.addEventListener('mousedown', (e) => {
+            if (track.paused) track.play();
+            showColors(e.clientX, e.clientY);
+        });
+
+        function showColors(x, y) {
+            document.body.style.backgroundColor = bgs[Math.floor(Math.random() * bgs.length)];
+            for(let i=0; i<4; i++) {
+                const s = document.createElement('div');
+                s.className = 'splash';
+                const sz = Math.random() * 100 + 60 + 'px';
+                s.style.width = sz; s.style.height = sz;
+                s.style.left = (x + (Math.random()-0.5)*100) - parseFloat(sz)/2 + 'px';
+                s.style.top = (y + (Math.random()-0.5)*100) - parseFloat(sz)/2 + 'px';
+                s.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                s.style.borderRadius = `${Math.random()*50+20}% ${Math.random()*50+20}%`;
+                document.body.appendChild(s);
+                setTimeout(() => s.remove(), 800);
+            }
+        }
+
+        function generate() {
+            const val = document.getElementById('uName').value;
+            if(!val) { alert("नाम लिखना न भूलें!"); return; }
+            
+            track.play();
+            const link = window.location.origin + window.location.pathname + "?name=" + encodeURIComponent(val);
+            const msg = `*${val}* ने आपके लिए एक *म्यूजिकल होली सरप्राइज* भेजा है! 🎨🎶%0A%0Aयहाँ क्लिक करके देखें 👇%0A${link}`;
+            
+            const wa = document.getElementById('waBtn');
+            wa.href = "https://api.whatsapp.com/send?text=" + msg;
+            wa.style.display = "flex";
+            
+            // सेंटर धमाका
+            showColors(window.innerWidth/2, window.innerHeight/2);
+        }
+
+        // ऑटो बैकग्राउंड
+        setInterval(() => {
+            document.body.style.backgroundColor = bgs[Math.floor(Math.random() * bgs.length)];
+        }, 5000);
+    </script>
+</body>
+</html>
