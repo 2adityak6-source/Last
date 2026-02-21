@@ -3,145 +3,135 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>होली उत्सव 2026 - बलम पिचकारी स्पेशल</title>
+    <title>होली धमाका 2026 - संगीत के साथ</title>
     <style>
-        :root {
-            --pink: #ff007f;
-            --yellow: #ffd700;
-            --blue: #00e5ff;
-        }
-
         body {
             margin: 0; padding: 0; min-height: 100vh;
             display: flex; justify-content: center; align-items: center;
+            font-family: 'Arial', sans-serif;
             background-color: #fff;
             transition: background-color 0.8s ease;
-            font-family: 'Arial', sans-serif;
             overflow: hidden; touch-action: manipulation;
         }
 
-        /* पिचकारी और गुलाल सजावट */
-        .decor { position: absolute; font-size: 60px; z-index: 5; filter: drop-shadow(4px 4px 10px rgba(0,0,0,0.2)); user-select: none; pointer-events: none; }
-        .p-left { top: 5%; left: 5%; transform: rotate(-20deg); }
-        .p-right { bottom: 5%; right: 5%; transform: rotate(160deg); }
-        .g-left { bottom: 10%; left: 10%; }
-        .g-right { top: 10%; right: 10%; }
+        /* पिचकारी और गुलाल */
+        .item { position: absolute; font-size: 55px; z-index: 5; filter: drop-shadow(3px 3px 8px rgba(0,0,0,0.2)); user-select: none; }
+        .p1 { top: 5%; left: 5%; transform: rotate(-15deg); }
+        .p2 { bottom: 5%; right: 5%; transform: rotate(165deg); }
+        .g1 { bottom: 8%; left: 8%; }
+        .g2 { top: 8%; right: 8%; }
 
-        /* मेन कार्ड */
         .card {
             position: relative; z-index: 20;
             background: rgba(255, 255, 255, 0.95);
-            padding: 30px; border-radius: 30px;
+            padding: 30px 20px; border-radius: 25px;
             text-align: center; width: 85%; max-width: 400px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.25);
-            border: 6px solid var(--pink);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.2);
+            border: 6px solid #ff007f;
         }
 
-        h1 { font-size: 3.5rem; margin: 10px 0; color: var(--pink); text-shadow: 3px 3px var(--yellow); animation: pulse 1.5s infinite; }
-        @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
+        h1 { font-size: 3rem; margin: 10px 0; color: #d81b60; text-shadow: 2px 2px #ffd700; }
+        .wish { font-size: 1.1rem; color: #333; font-weight: bold; margin-bottom: 20px; }
 
-        .wish-msg { font-size: 1.2rem; color: #333; font-weight: bold; margin-bottom: 20px; line-height: 1.4; }
-
-        input { width: 90%; padding: 15px; border: 2px solid var(--pink); border-radius: 50px; margin-bottom: 15px; text-align: center; font-size: 1.1rem; }
-
-        .btn-wa {
-            background: #25D366; color: white; border: none; padding: 15px 25px;
-            border-radius: 50px; font-weight: bold; cursor: pointer; width: 100%;
-            display: none; align-items: center; justify-content: center;
-            text-decoration: none; font-size: 1.1rem; box-shadow: 0 10px 20px rgba(37, 211, 102, 0.3);
+        input {
+            width: 85%; padding: 12px; border: 2px solid #ff007f;
+            border-radius: 50px; margin-bottom: 15px; text-align: center; font-size: 1rem;
         }
 
-        .btn-gen { background: var(--pink); color: white; border: none; padding: 15px 25px; border-radius: 50px; font-weight: bold; width: 100%; margin-bottom: 10px; cursor: pointer; }
+        .btn-create { background: #ff007f; color: white; border: none; padding: 12px 25px; border-radius: 50px; font-weight: bold; cursor: pointer; width: 100%; margin-bottom: 10px; }
+        .btn-whatsapp { background: #25D366; color: white; border: none; padding: 12px 25px; border-radius: 50px; font-weight: bold; cursor: pointer; width: 100%; display: none; align-items: center; justify-content: center; text-decoration: none; }
 
-        /* रंग के धब्बे */
-        .splash { position: absolute; border-radius: 50%; pointer-events: none; z-index: 2; animation: splashOut 0.8s ease-out forwards; }
-        @keyframes splashOut { 0% { transform: scale(0); opacity: 1; } 100% { transform: scale(1.8); opacity: 0; } }
-
-        /* म्यूजिक बटन */
-        .m-toggle { position: fixed; top: 15px; right: 15px; z-index: 100; cursor: pointer; font-size: 35px; background: white; border-radius: 50%; width: 50px; height: 50px; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 15px rgba(0,0,0,0.2); }
+        .paint { position: absolute; border-radius: 50%; pointer-events: none; z-index: 2; animation: splash 0.7s ease-out forwards; }
+        @keyframes splash { 0% { transform: scale(0); opacity: 1; } 100% { transform: scale(1.6); opacity: 0; } }
+        
+        /* म्यूजिक कंट्रोलर (छोटा और कोनों में) */
+        .music-note { position: fixed; top: 10px; right: 10px; z-index: 100; cursor: pointer; font-size: 30px; background: white; border-radius: 50%; padding: 5px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
     </style>
 </head>
 <body>
 
-    <div class="m-toggle" onclick="toggleM()">🎵</div>
+    <div class="music-note" onclick="toggleMusic()">🎵</div>
 
-    <audio id="audioHoli" loop>
-        <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-8.mp3" type="audio/mpeg">
+    <audio id="holiSong" loop>
+        <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
     </audio>
 
-    <div class="decor p-left">🔫</div>
-    <div class="decor p-right">🔫</div>
-    <div class="decor g-left">🥣</div>
-    <div class="decor g-right">🥣</div>
+    <div class="item p1">🔫</div>
+    <div class="item p2">🔫</div>
+    <div class="item g1">🥣</div>
+    <div class="item g2">🥣</div>
 
     <div class="card">
-        <h2 id="greet">नमस्ते!</h2>
-        <h1>Happy Holi</h1>
-        <p class="wish-msg">"बलम पिचकारी जो तूने मुझे मारी... <br> तो सीधी सादी छोरी शराबी हो गई!"</p>
+        <h2 id="fromDisplay">नमस्ते!</h2>
+        <h1>Happy Holi!</h1>
+        <p class="wish">संगीत और रंगों के साथ होली मनाएं!</p>
 
-        <input type="text" id="uName" placeholder="अपना नाम यहाँ लिखें">
-        <button class="btn-gen" onclick="generate()">1. लिंक और गाना शुरू करें</button>
-        <a id="waBtn" class="btn-wa" href="#" target="_blank">2. WhatsApp पर भेजें ✅</a>
-        
-        <p style="font-size: 0.8rem; margin-top: 15px; color: #666;">रंगों के लिए स्क्रीन पर कहीं भी टच करें!</p>
+        <input type="text" id="userName" placeholder="अपना नाम लिखें">
+        <button class="btn-create" onclick="createHoliLink()">1. लिंक और म्यूजिक शुरू करें</button>
+        <a id="whatsappBtn" class="btn-whatsapp" href="#" target="_blank">2. WhatsApp पर भेजें ➔</a>
+        <div id="linkStatus" style="font-size: 0.8rem; margin-top: 10px; color: #d81b60;"></div>
     </div>
 
     <script>
-        const colors = ['#ff007f', '#ffd700', '#00e5ff', '#39ff14', '#ff4500', '#9c27b0'];
-        const bgs = ['#FFF5F8', '#F0FDFF', '#FFFDF0', '#F3E5F5', '#E8F5E9'];
-        const track = document.getElementById('audioHoli');
+        const bgColors = ['#FFF5F8', '#F0FDFF', '#FFFDF0', '#F3E5F5', '#E8F5E9', '#FFF3E0'];
+        const paintColors = ['#FF007F', '#FFD700', '#00E5FF', '#39FF14', '#FF4500', '#9C27B0'];
+        const song = document.getElementById('holiSong');
 
-        // नाम डिस्प्ले
-        const urlParams = new URLSearchParams(window.location.search);
-        const n = urlParams.get('name');
-        if (n) { document.getElementById('greet').innerText = decodeURIComponent(n) + " की ओर से..."; }
-
-        function toggleM() {
-            if (track.paused) track.play();
-            else track.pause();
+        // URL से नाम पढ़ना
+        const params = new URLSearchParams(window.location.search);
+        const naam = params.get('n');
+        if (naam) {
+            document.getElementById('fromDisplay').innerText = decodeURIComponent(naam) + " की ओर से आपको...";
         }
 
+        // म्यूजिक चालू/बंद करने के लिए
+        function toggleMusic() {
+            if (song.paused) song.play();
+            else song.pause();
+        }
+
+        // क्लिक पर रंग, बैकग्राउंड और म्यूजिक
         window.addEventListener('mousedown', (e) => {
-            if (track.paused) track.play();
-            showColors(e.clientX, e.clientY);
+            if (song.paused) song.play(); // पहली बार क्लिक पर गाना शुरू होगा
+            changeEverything(e.clientX, e.clientY);
         });
 
-        function showColors(x, y) {
-            document.body.style.backgroundColor = bgs[Math.floor(Math.random() * bgs.length)];
-            for(let i=0; i<4; i++) {
-                const s = document.createElement('div');
-                s.className = 'splash';
-                const sz = Math.random() * 100 + 60 + 'px';
-                s.style.width = sz; s.style.height = sz;
-                s.style.left = (x + (Math.random()-0.5)*100) - parseFloat(sz)/2 + 'px';
-                s.style.top = (y + (Math.random()-0.5)*100) - parseFloat(sz)/2 + 'px';
-                s.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
-                s.style.borderRadius = `${Math.random()*50+20}% ${Math.random()*50+20}%`;
-                document.body.appendChild(s);
-                setTimeout(() => s.remove(), 800);
+        function changeEverything(x, y) {
+            document.body.style.backgroundColor = bgColors[Math.floor(Math.random() * bgColors.length)];
+            for(let i=0; i<3; i++) {
+                const p = document.createElement('div');
+                p.className = 'paint';
+                const size = Math.random() * 80 + 50 + 'px';
+                p.style.width = size; p.style.height = size;
+                p.style.left = (x + (Math.random()-0.5)*80) - parseFloat(size)/2 + 'px';
+                p.style.top = (y + (Math.random()-0.5)*80) - parseFloat(size)/2 + 'px';
+                p.style.backgroundColor = paintColors[Math.floor(Math.random() * paintColors.length)];
+                p.style.borderRadius = `${Math.random()*40+20}% ${Math.random()*40+20}%`;
+                document.body.appendChild(p);
+                setTimeout(() => p.remove(), 700);
             }
         }
 
-        function generate() {
-            const val = document.getElementById('uName').value;
-            if(!val) { alert("नाम लिखना न भूलें!"); return; }
+        function createHoliLink() {
+            const name = document.getElementById('userName').value;
+            if(!name) { alert("कृपया नाम लिखें!"); return; }
             
-            track.play();
-            const link = window.location.origin + window.location.pathname + "?name=" + encodeURIComponent(val);
-            const msg = `*${val}* ने आपके लिए एक *म्यूजिकल होली सरप्राइज* भेजा है! 🎨🎶%0A%0Aयहाँ क्लिक करके देखें 👇%0A${link}`;
+            song.play(); // बटन दबाते ही गाना शुरू
+
+            const finalLink = window.location.origin + window.location.pathname + "?n=" + encodeURIComponent(name);
+            const whatsappMsg = `*${name}* ने आपके लिए एक स्पेशल होली सरप्राइज भेजा है! 🎨🎶%0Aदेखने के लिए यहाँ क्लिक करें 👇%0A${finalLink}`;
             
-            const wa = document.getElementById('waBtn');
-            wa.href = "https://api.whatsapp.com/send?text=" + msg;
-            wa.style.display = "flex";
+            const btn = document.getElementById('whatsappBtn');
+            btn.href = "https://api.whatsapp.com/send?text=" + whatsappMsg;
+            btn.style.display = "flex";
             
-            // सेंटर धमाका
-            showColors(window.innerWidth/2, window.innerHeight/2);
+            document.getElementById('linkStatus').innerText = "लिंक तैयार है! म्यूजिक शुरू हो गया है।";
+            changeEverything(window.innerWidth/2, window.innerHeight/2);
         }
 
-        // ऑटो बैकग्राउंड
         setInterval(() => {
-            document.body.style.backgroundColor = bgs[Math.floor(Math.random() * bgs.length)];
-        }, 5000);
+            document.body.style.backgroundColor = bgColors[Math.floor(Math.random() * bgColors.length)];
+        }, 4000);
     </script>
 </body>
 </html>
