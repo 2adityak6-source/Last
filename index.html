@@ -3,19 +3,36 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>होली धमाका 2026 - संगीत के साथ</title>
+    <title>होली धमाका 2026 - कलर स्मोक स्पेशल</title>
     <style>
         body {
             margin: 0; padding: 0; min-height: 100vh;
             display: flex; justify-content: center; align-items: center;
             font-family: 'Arial', sans-serif;
             background-color: #fff;
-            transition: background-color 0.8s ease;
+            transition: background-color 1.5s ease;
             overflow: hidden; touch-action: manipulation;
         }
 
+        /* कलर स्मोक एनीमेशन */
+        .smoke {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(40px);
+            opacity: 0;
+            z-index: 1;
+            pointer-events: none;
+            animation: smokeMove 8s infinite alternate;
+        }
+
+        @keyframes smokeMove {
+            0% { transform: translate(0, 0) scale(1); opacity: 0.4; }
+            50% { transform: translate(100px, 50px) scale(1.5); opacity: 0.6; }
+            100% { transform: translate(-50px, 100px) scale(1.2); opacity: 0.4; }
+        }
+
         /* पिचकारी और गुलाल */
-        .item { position: absolute; font-size: 55px; z-index: 5; filter: drop-shadow(3px 3px 8px rgba(0,0,0,0.2)); user-select: none; }
+        .item { position: absolute; font-size: 55px; z-index: 10; filter: drop-shadow(3px 3px 8px rgba(0,0,0,0.2)); user-select: none; }
         .p1 { top: 5%; left: 5%; transform: rotate(-15deg); }
         .p2 { bottom: 5%; right: 5%; transform: rotate(165deg); }
         .g1 { bottom: 8%; left: 8%; }
@@ -23,7 +40,8 @@
 
         .card {
             position: relative; z-index: 20;
-            background: rgba(255, 255, 255, 0.95);
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
             padding: 30px 20px; border-radius: 25px;
             text-align: center; width: 85%; max-width: 400px;
             box-shadow: 0 15px 40px rgba(0,0,0,0.2);
@@ -41,10 +59,9 @@
         .btn-create { background: #ff007f; color: white; border: none; padding: 12px 25px; border-radius: 50px; font-weight: bold; cursor: pointer; width: 100%; margin-bottom: 10px; }
         .btn-whatsapp { background: #25D366; color: white; border: none; padding: 12px 25px; border-radius: 50px; font-weight: bold; cursor: pointer; width: 100%; display: none; align-items: center; justify-content: center; text-decoration: none; }
 
-        .paint { position: absolute; border-radius: 50%; pointer-events: none; z-index: 2; animation: splash 0.7s ease-out forwards; }
+        .paint { position: absolute; border-radius: 50%; pointer-events: none; z-index: 5; animation: splash 0.7s ease-out forwards; }
         @keyframes splash { 0% { transform: scale(0); opacity: 1; } 100% { transform: scale(1.6); opacity: 0; } }
         
-        /* म्यूजिक कंट्रोलर (छोटा और कोनों में) */
         .music-note { position: fixed; top: 10px; right: 10px; z-index: 100; cursor: pointer; font-size: 30px; background: white; border-radius: 50%; padding: 5px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
     </style>
 </head>
@@ -53,8 +70,10 @@
     <div class="music-note" onclick="toggleMusic()">🎵</div>
 
     <audio id="holiSong" loop>
-        <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+        <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-8.mp3" type="audio/mpeg">
     </audio>
+
+    <div id="smoke-container"></div>
 
     <div class="item p1">🔫</div>
     <div class="item p2">🔫</div>
@@ -64,10 +83,10 @@
     <div class="card">
         <h2 id="fromDisplay">नमस्ते!</h2>
         <h1>Happy Holi!</h1>
-        <p class="wish">संगीत और रंगों के साथ होली मनाएं!</p>
+        <p class="wish">"पिचकारी की धार, गुलाल की बौछार, मुबारक हो आपको होली का त्योहार!"</p>
 
         <input type="text" id="userName" placeholder="अपना नाम लिखें">
-        <button class="btn-create" onclick="createHoliLink()">1. लिंक और म्यूजिक शुरू करें</button>
+        <button class="btn-create" onclick="createHoliLink()">1. जादुई लिंक और गाना शुरू करें</button>
         <a id="whatsappBtn" class="btn-whatsapp" href="#" target="_blank">2. WhatsApp पर भेजें ➔</a>
         <div id="linkStatus" style="font-size: 0.8rem; margin-top: 10px; color: #d81b60;"></div>
     </div>
@@ -77,34 +96,48 @@
         const paintColors = ['#FF007F', '#FFD700', '#00E5FF', '#39FF14', '#FF4500', '#9C27B0'];
         const song = document.getElementById('holiSong');
 
-        // URL से नाम पढ़ना
+        // कलर स्मोक बनाना
+        function initSmoke() {
+            const container = document.getElementById('smoke-container');
+            for (let i = 0; i < 6; i++) {
+                const smoke = document.createElement('div');
+                smoke.className = 'smoke';
+                smoke.style.width = Math.random() * 300 + 200 + 'px';
+                smoke.style.height = smoke.style.width;
+                smoke.style.backgroundColor = paintColors[Math.floor(Math.random() * paintColors.length)];
+                smoke.style.left = Math.random() * 100 + '%';
+                smoke.style.top = Math.random() * 100 + '%';
+                smoke.style.animationDelay = i * 1.5 + 's';
+                container.appendChild(smoke);
+            }
+        }
+        initSmoke();
+
         const params = new URLSearchParams(window.location.search);
         const naam = params.get('n');
         if (naam) {
             document.getElementById('fromDisplay').innerText = decodeURIComponent(naam) + " की ओर से आपको...";
         }
 
-        // म्यूजिक चालू/बंद करने के लिए
         function toggleMusic() {
             if (song.paused) song.play();
             else song.pause();
         }
 
-        // क्लिक पर रंग, बैकग्राउंड और म्यूजिक
         window.addEventListener('mousedown', (e) => {
-            if (song.paused) song.play(); // पहली बार क्लिक पर गाना शुरू होगा
+            if (song.paused) song.play();
             changeEverything(e.clientX, e.clientY);
         });
 
         function changeEverything(x, y) {
             document.body.style.backgroundColor = bgColors[Math.floor(Math.random() * bgColors.length)];
-            for(let i=0; i<3; i++) {
+            for(let i=0; i<4; i++) {
                 const p = document.createElement('div');
                 p.className = 'paint';
-                const size = Math.random() * 80 + 50 + 'px';
+                const size = Math.random() * 100 + 50 + 'px';
                 p.style.width = size; p.style.height = size;
-                p.style.left = (x + (Math.random()-0.5)*80) - parseFloat(size)/2 + 'px';
-                p.style.top = (y + (Math.random()-0.5)*80) - parseFloat(size)/2 + 'px';
+                p.style.left = (x + (Math.random()-0.5)*100) - parseFloat(size)/2 + 'px';
+                p.style.top = (y + (Math.random()-0.5)*100) - parseFloat(size)/2 + 'px';
                 p.style.backgroundColor = paintColors[Math.floor(Math.random() * paintColors.length)];
                 p.style.borderRadius = `${Math.random()*40+20}% ${Math.random()*40+20}%`;
                 document.body.appendChild(p);
@@ -115,8 +148,7 @@
         function createHoliLink() {
             const name = document.getElementById('userName').value;
             if(!name) { alert("कृपया नाम लिखें!"); return; }
-            
-            song.play(); // बटन दबाते ही गाना शुरू
+            song.play();
 
             const finalLink = window.location.origin + window.location.pathname + "?n=" + encodeURIComponent(name);
             const whatsappMsg = `*${name}* ने आपके लिए एक स्पेशल होली सरप्राइज भेजा है! 🎨🎶%0Aदेखने के लिए यहाँ क्लिक करें 👇%0A${finalLink}`;
@@ -125,7 +157,7 @@
             btn.href = "https://api.whatsapp.com/send?text=" + whatsappMsg;
             btn.style.display = "flex";
             
-            document.getElementById('linkStatus').innerText = "लिंक तैयार है! म्यूजिक शुरू हो गया है।";
+            document.getElementById('linkStatus').innerText = "लिंक और म्यूजिक तैयार है!";
             changeEverything(window.innerWidth/2, window.innerHeight/2);
         }
 
